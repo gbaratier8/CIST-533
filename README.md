@@ -14,32 +14,25 @@ Activity 7: Extracting information from a ZIP file (.zip), basic NLP techniques 
 Sources:
 Activity 1 - 
 Turkel, W.J. & Crymble, A. (2012). "Working with Text Files in Python," Programming Historian 1, https://doi.org/10.46430/phen0020. 
-<img width="1430" height="53" alt="image" src="https://github.com/user-attachments/assets/25a13e0a-1fed-4722-831c-baaa67d3901d" />
 
 Activity 2 - 
 Turkel, W.J. & Crymble, A.  (2012). "Keywords in Context (Using n-grams) with Python," Programming Historian 1, https://doi.org/10.46430/phen0010.
-<img width="1608" height="53" alt="image" src="https://github.com/user-attachments/assets/d71e65f2-061f-4698-809a-d078e87aa4ce" />
 
 Activity 3 - 
 NLTK Documentation (2025). https://www.nltk.org/howto.html. 
-<img width="738" height="55" alt="image" src="https://github.com/user-attachments/assets/4076bdfd-ec98-4a76-b484-2a88dccdd403" />
 
 Activity 4 & 5 - 
 Gallaudet University-Deaf Rare Materials Collection (2012). Internet Archive. https://archive.org/details/gallaudetuniversity-deafrarematerials?tab=collection. 
-<img width="1792" height="55" alt="image" src="https://github.com/user-attachments/assets/b68e0c6c-6719-424f-926b-ea96743d4e5b" />
 
 McDaniel, C. (2014). "Data Mining the Internet Archive Collection," Programming Historian 3, https://doi.org/10.46430/phen0035.
-<img width="1463" height="55" alt="image" src="https://github.com/user-attachments/assets/3f443f3b-659c-4ad7-90fa-f4ea57d13ad2" />
 
 Activity 6 - 
-Burns, H. (2021). "Crowdsourced-Data Normalization with Python and Pandas," Programming Historian 10, https://doi.org/10.46430/phen0093. <img width="489" height="60" alt="image" src="https://github.com/user-attachments/assets/49ca54a1-4fd7-47e7-86cd-47711bab503c" />
+Burns, H. (2021). "Crowdsourced-Data Normalization with Python and Pandas," Programming Historian 10, https://doi.org/10.46430/phen0093. 
 
 Daen, L.R. (2021). “Dataset: Federal Revolutionary War Invalid Pension Claims, 1792-1795,” University of Pennsylvania Scholarly Commons, https://doi.org/10.48659/jm15-bg23. 
-<img width="2156" height="140" alt="image" src="https://github.com/user-attachments/assets/cf2a82e4-5cba-4f6e-a163-7b9d30c763e8" />
 
 Activity 7 - 
 Andrews, W.L. (n.d.). “North American Slave Narratives,” Documenting the American South, University of North Carolina Chapel Hill, https://docsouth.unc.edu/neh//.
-<img width="2007" height="60" alt="image" src="https://github.com/user-attachments/assets/1cd18f90-b1da-459d-9b33-becfb36eeec6" />
 
 Lù, X.H. (2026). BM25 0.3.16. PyPI (the Python Package Index), https://pypi.org/project/BM25/.
 
@@ -50,5 +43,3 @@ NLTK Documentation (2025). https://www.nltk.org/howto.html.
 Ramos, L.P. (2025). “Python's zipfile: Manipulate Your ZIP Files Efficiently,” Real Python, https://realpython.com/python-zipfile/. 
 
 Robertson, S. & Zaragoza, H. (2009). “The Probabilistic Relevance Framework: BM25 and Beyond,” Foundations and Trends in Information Retrieval, Volume 3, Number 4, pp. 333-389, https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf.
-<img width="3143" height="221" alt="image" src="https://github.com/user-attachments/assets/5a661376-71fa-44f9-a19a-cec6463f76de" />
-
