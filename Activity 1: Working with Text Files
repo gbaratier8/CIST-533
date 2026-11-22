@@ -1,0 +1,66 @@
+#Gabriella Baratier
+#CIST 533
+#Working with Text Files (.txt)
+#Adapted from Programming Historian Lesson
+#https://programminghistorian.org/en/lessons/working-with-text-files
+
+
+newspaper_file = open('StudentNewspapers1989April7.txt' , 'r' , encoding = 'utf-8')
+newspaper_text = newspaper_file.read()
+newspaper_file.close()
+
+
+newspaper_normalized = newspaper_text.lower().split('.')
+newspaper_parsed = open('StudentNewspapers1989April7Results.txt' , 'w' , encoding = 'utf-8')
+
+false_positive = 0
+
+
+for line in newspaper_normalized:
+    
+    if 'disabled' in line or 'disability' in line:
+        if 'disabled vehicle' in line:
+            print(line)
+            false_positive += 1
+        else:
+            newspaper_parsed.write(line + '\n')
+
+    if 'deaf' in line:
+        if 'fell on deaf ears' in line:
+            print(line)
+            false_positive += 1
+        else:
+            newspaper_parsed.write(line + '\n')
+
+    if 'blind' in line:
+        if 'blind faith' in line or 'blind to' in line or 'blinding' in line:
+            print(line)
+            false_positive += 1
+        else:
+            newspaper_parsed.write(line + '\n')
+
+    if 'crippled' in line:
+        if 'crippled finances' in line:
+            print(line)
+            false_positive += 1
+        else:
+            newspaper_parsed.write(line + '/n'+'/n')
+
+print ('Number of false positives:' , false_positive)
+  
+newspaper_parsed.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
