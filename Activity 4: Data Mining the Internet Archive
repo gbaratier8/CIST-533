@@ -1,0 +1,42 @@
+#Data Mining the Internet Archive
+#Adapted from Programming Historian Lesson
+#https://programminghistorian.org/en/lessons/data-mining-the-internet-archive
+
+import internetarchive
+import os
+
+subfolder = 'marc_records'
+os.makedirs(subfolder, exist_ok=True)
+
+#Replace with any Internet Archive collection of interest
+collection_item = internetarchive.get_item('gallaudetuniversity-deafrarematerials')
+collection_title = collection_item.metadata.get('title')
+total_results = internetarchive.search_items('collection:gallaudetuniversity-deafrarematerials')
+
+print('Searching collection:' , collection_title)
+print('Total number of items:' , total_results.num_found)
+
+marc_count = 0
+                                    
+with open('marc-errors.log' , 'a' , encoding = 'utf-8') as error_log:
+    for result in total_results:
+        itemid = result['identifier']
+        item = internetarchive.get_item(itemid)
+        filename = itemid + '_marc.xml'
+        marc_record = item.get_file(filename)
+
+        if marc_record:
+            try:
+                print('Downloading MARC Record for:' , itemid)
+                destination = os.path.join(subfolder, filename)
+                marc_record.download(file_path=destination)
+                marc_count += 1
+
+            except Exception as e:
+                error_log.write(f'Could not download {itemid} because of error: {e}\n')
+
+        else:
+            error_log.write(f'No MARC XML file found for {itemid}\n')
+
+
+print(f'Done!' , marc_count , 'MARC Records Downloaded.')
