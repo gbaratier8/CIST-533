@@ -1,0 +1,46 @@
+#Gabriella Baratier
+#CIST 533
+#Natural Language Processing
+#Adapted from NLTK
+#https://www.nltk.org/howto.html
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.sentiment import SentimentIntensityAnalyzer
+from nltk.corpus import wordnet , stopwords
+from nltk.collocations import BigramCollocationFinder
+from nltk.metrics import BigramAssocMeasures
+
+#Replace textfiletitle with txt file of interest
+file = open('textfiletitle.txt' , 'r', encoding = 'utf8')
+text = file.read()
+file.close()
+
+#Preprocessing
+words = word_tokenize(text)
+tag = nltk.pos_tag(words)
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(w) for w in words]
+tree = nltk.ne_chunk(tag)
+
+#NER
+print('\nIdentified Named Entities:')
+for word in tree:
+    if hasattr (word, 'label'):
+        entity_name = " ".join(w for w, pos in word.leaves())
+        entity_type = word.label()
+        print(f"{entity_name} / {entity_type}")
+
+#Sentiment Analysis
+sentiment_analysis = SentimentIntensityAnalyzer()
+scores = sentiment_analysis.polarity_scores(press_release_text)
+print('\nSentiment analysis scores:\n' , scores)
+
+#Common Co-occurrences
+finder = BigramCollocationFinder.from_words(words)
+stop_words = set(stopwords.words('english'))
+finder.apply_word_filter(lambda w: not w.isalpha() or w in stop_words)
+bigram_measures = BigramAssocMeasures()
+top_collocations = finder.nbest(bigram_measures.likelihood_ratio, 5)
+print('\n' , top_collocations)
