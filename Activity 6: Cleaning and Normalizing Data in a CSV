@@ -1,0 +1,66 @@
+#CSV Data Cleaning and Normalization
+#Gabriella Baratier
+#CIST 533
+#Working with CSVs (.csv)
+#Adapted from Programming Historian Lesson
+#https://programminghistorian.org/en/lessons/crowdsourced-data-normalization-with-pandas
+
+import pandas
+
+#Replace CSV title and column titles/edits based on the specific CSV being used
+df = pandas.read_csv("Federal_Revolutionary_War_Invalid_Pension_Claims__1792_1795.csv")
+
+
+print(df.shape , '\n')
+print(df.columns , '\n')
+print(df.isnull().sum(), '\n')
+
+state_counts = df['State'].value_counts()
+print(state_counts , '\n')
+
+rank_isolated = df['Rank, Regiment, or Ship'].str.split(',').str[0]
+rank_counts = rank_isolated.value_counts()
+print(rank_counts.to_string() , '\n')
+
+cleaned_ranks = []
+
+for rank in rank_isolated:
+    value = str(rank)
+    if 'Capt' in value or 'Cap' in value:
+        cleaned_ranks.append('Captain')
+    elif 'Colonel' in value or 'Col' in value:
+        cleaned_ranks.append('Colonel')
+    elif 'Priv' in value or 'Privaate' in value or 'Priate' in value or 'Prviate' in value or 'private' in value:
+        cleaned_ranks.append('Private')
+    elif 'Orderly Sereant' in value or 'Orderly-sergeant' in value:
+        cleaned_ranks.append('Orderly Sergeant')
+    elif 'Corporeal' in value or 'Corporal' in value or 'Corp' in value:
+        cleaned_ranks.append('Corporal')
+    elif 'Lieut' in value or 'Lietenant' in value or 'Lieutenant' in value or 'lieutenant' in value:
+        cleaned_ranks.append('Lieutenant')
+    elif 'Marine' in value:
+        cleaned_ranks.append('Mariner')
+    elif 'Quartermaster-sergeant' in value or "Quartermaster's sergeat" in value or "Quartermaster sergeant" in value:
+        cleaned_ranks.append('Quartermaster-Sergeant')
+    elif 'Segeant' in value or 'Sergeant' in value or '2d' in value:
+        cleaned_ranks.append('Sergeant')
+    elif 'Forage-master' in value:
+        cleaned_ranks.append('Deputy Forage-master')
+    elif 'Ensigh' in value:
+        cleaned_ranks.append('Ensign')
+    elif 'nan' in value:
+        cleaned_ranks.append('Unknown')
+    else:
+        cleaned_ranks.append(value)
+
+rank_isolated = pandas.Series(cleaned_ranks)
+rank_counts = rank_isolated.value_counts()
+print(rank_counts.to_string() , '\n')
+
+pension_rate = df['Pension Rate'].dropna().str.strip()
+pension_rate = pension_rate.replace('Full' , 1.00)
+pension_rate = pension_rate.replace('(1/2 - 1795)' , 0.50)
+pension_rate = pandas.to_numeric(pension_rate)
+print(pension_rate.value_counts(), '\n')
+pension_average = pension_rate.mean()
+print('Average Pension Rate:' , pension_average)
