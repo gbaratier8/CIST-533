@@ -1,0 +1,98 @@
+#Gabriella Baratier
+#CIST 533
+#Analysis, NLP, and BM25 of .txt files in a .zip file
+#Resources used:
+#https://realpython.com/python-zipfile/
+#https://www.nltk.org/howto.html
+#https://web.stanford.edu/class/cs276/handouts/lecture12-bm25etc.pdf
+#https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf
+#https://pypi.org/project/BM25/
+
+from collections import Counter, defaultdict
+import zipfile
+import urllib.request
+from pathlib import Path
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.sentiment import SentimentIntensityAnalyzer
+import csv
+import sys
+import BM25
+
+csv.field_size_limit(sys.maxsize)
+
+#Replace with ZIP file of interest
+url = "https://docsouth.unc.edu/full-text/na-slave-narratives.zip"
+zip_file = Path("na-slave-narratives.zip")
+
+if not zip_file.exists():
+    urllib.request.urlretrieve(url, zip_file)
+
+#Replace with keywords of interest
+keywords = ('crippled', 'disabled', 'disability')
+context_patterns = defaultdict(Counter)
+matching_files = 0
+file_types = []
+corpus_docs = {}
+sentiment_analysis = SentimentIntensityAnalyzer()
+sentiment_scores = defaultdict(list)
+
+with zipfile.ZipFile(zip_file, mode="r") as zf:
+    for file in zf.namelist():
+       extension = Path(file).suffix.lower()
+       if extension not in file_types:
+            if extension != '':
+               file_types.append(extension)
+    print("Types of files:" , file_types)
+
+    for file in zf.namelist():
+        if file.lower().endswith(".txt"):
+            content = zf.read(file).decode("utf-8").lower()
+            corpus_docs[file] = [w.strip(".,;!?'\"") for w in content.split()]
+
+            if any(kw in content for kw in keywords):
+                matching_files += 1
+
+                for sentence in sent_tokenize(content):
+                    if any(kw in sentence for kw in keywords):
+                        words = word_tokenize(sentence)
+                        tagged_words = nltk.pos_tag(words)
+
+                        cleaned_tagged = [(w, t) for w, t in tagged_words if any(ch.isalnum() for ch in w)]
+
+                        for interval, (word, tag) in enumerate(cleaned_tagged):
+                            if word in keywords:
+                                previous_word = " ".join(w for w, _ in cleaned_tagged[max(0, interval - 2):interval]) or "START"
+                                next_word = " ".join(w for w, _ in cleaned_tagged[interval + 1:interval + 3]) or "END"
+                                context_patterns[word][(previous_word, f"{word}/{tag}", next_word)] += 1
+
+                                scores = sentiment_analysis.polarity_scores(sentence)
+                                sentiment_scores[word].append(scores['compound'])
+
+print("Number of matching files:", matching_files)
+
+for kw in keywords:
+    print(f"\n{kw.upper()}")
+    for (prev_w, tagged_kw, next_w), count in context_patterns[kw].most_common(10):
+        print(f"{count}x : {prev_w} [{tagged_kw}] {next_w}")
+    kw_scores = sentiment_scores[kw]
+    avg_compound = sum(kw_scores) / len(kw_scores) if kw_scores else 0
+    print(f"\nAverage sentence sentiment ({len(kw_scores)} matches): {avg_compound:.3f}")
+
+csv_file = "documents.csv"
+with open(csv_file, mode="w", newline="", encoding="utf-8") as f:
+          writer = csv.writer(f)
+          writer.writerow(["filename" , "text"])
+          writer.writerows((fname, " ".join(words)) for fname, words in corpus_docs.items())
+        
+            
+filenames = list(corpus_docs.keys())
+corpus = BM25.load("documents.csv", document_column="text")
+retriever = BM25.index(corpus)
+queries = keywords         
+results = retriever.search(queries, k=10)
+
+for kw, kw_results in zip(queries, results):
+    print(f"\nTOP 10 BM25: {kw.upper()}")
+    for result in kw_results:
+            print(f"Score: {result['score']:.4f} | File: {filenames[result['id']]}")
