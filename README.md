@@ -4,11 +4,17 @@ Historians and Python-Based Information Retrieval
 Welcome! This repository contains code from 7 activities I completed to learn more about how historians can leverage the theories and models of information retrieval in historical research. The examples draw upon my own historical research interest, disability history, but can be adapted to other topics. My inspiration for this project was trying to find solutions to common problems I have run into in my research: a large number of false positive results returned by basic keyword searching due to the language of disability being used metaphorically (i.e. disabled vehicles, advice that fell on deaf ears, blind opposition to something, etc.), difficulties with navigating messy CSVs with inconsistently formatted data, and difficulties of navigating large corpora of documents. My hope is that this package is accessible to historians with little to no prior programming experience. Below is a summary of each of the 7 activities included in this repository, ordered roughly in progressive difficulty.
 
 Activity 1: Searching a text file (.txt), removing pre-selected false positive results
+
 Activity 2: Searching a text file (.txt), creating n-grams / keyword in context (KWIC) summaries
+
 Activity 3: Basic Natural Language Processing (NLP) techniques on a text file (.txt)
+
 Activity 4: Data mining the Internet Archive, downloading MARC XML records
+
 Activity 5: Extracting information from MARC XML records, exporting to a CSV (.csv)
+
 Activity 6: Data cleaning and normalization of a CSV (.csv)
+
 Activity 7: Extracting information from a ZIP file (.zip), basic NLP techniques on a corpus of text files, BM25 calculation
 
 Sources:
