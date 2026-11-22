@@ -1,0 +1,93 @@
+#Gabriella Baratier
+#CIST 533
+#MARC XML Analysis
+#Adapted from the Programming Historian Lesson
+#https://programminghistorian.org/en/lessons/data-mining-the-internet-archive
+
+
+import os
+import pymarc
+import csv
+from collections import Counter
+from pathlib import Path
+
+id_log = []
+title_log = []
+author_log = []
+pub_places_log = []
+subjects_log = []
+skipped_files = []
+csv_rows = []
+
+#Replace /your/file/path with the file path where the MARC XML records are downloaded
+path = Path('/your/file/path')
+
+for xml_file in path.glob('*xml'):
+
+    if xml_file.name.startswith('._') or xml_file.stat().st_size == 0:
+        skipped_files.append(xml_file.name)
+        continue
+
+    try:
+        records = pymarc.parse_xml_to_array(str(xml_file))
+        
+    except Exception as e:
+        skipped_files.append(f"{xml_file.name} ({e})")
+        continue
+
+#Edit to add/remove any metadata fields of interest
+    for record in records:
+
+        field_001 = record.get('001')
+        identifier_001 = field_001.data if field_001 else None
+        if identifier_001:
+            id_log.append(identifier_001)
+
+        field_100 = record.get('100')
+        author_100 = field_100.get('a') if field_100 else None
+        author_100 = author_100.strip(':,/.')if author_100 else None
+        if author_100:
+            author_log.append(author_100)
+
+        if not author_100:
+            field_700 = record.get('700')
+            author_700 = field_700.get('a') if field_700 else None
+            author_700 = author_700.strip(':,/.')if author_700 else None
+            if author_700:
+                author_log.append(author_700)
+                                   
+        field_245 = record.get('245')
+        title_245 = field_245.get('a') if field_245 else None
+        title_245 = title_245.strip('[,/;:') if title_245 else None
+        if title_245:
+            title_log.append(title_245)
+            
+        field_260 = record.get('260')
+        pub_places_260 = field_260.get('a') if field_260 else None
+        if pub_places_260:
+            pub_places_log.append(pub_places_260)
+    
+        subjects_650 = [field.value() for field in record.get_fields('650')]
+        if subjects_650:
+            subjects_log.extend(subjects_650)
+
+
+        csv_rows.append([identifier_001 or "", author_100 or author_700 or "", title_245 or "",
+                         pub_places_260 or "", "; ".join(subjects_650)])
+
+            
+authors_count = Counter(author_log)
+pub_places_count = Counter(pub_places_log)
+subjects_count = Counter(subjects_log)
+
+print(authors_count)
+print('\n')
+print(pub_places_count)
+print('\n')
+print(subjects_count)
+
+#Edit CSV title if using a different collection
+with open ("gallaudetrarebooks.csv" , mode="w" , newline="" , encoding="utf-8") as file:
+           writer = csv.writer(file)
+           writer.writerow(["Identifier" , "Author" , "Title", "Place of Publication", "Subjects"])
+           writer.writerows(csv_rows)
