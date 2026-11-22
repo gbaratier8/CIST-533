@@ -1,0 +1,24 @@
+#Keywords In Context (n-grams)
+#Adapted from Programming Historian Lesson
+#https://programminghistorian.org/en/lessons/keywords-in-context-using-n-grams
+
+#Replace textfiletitle with txt file of interest
+file = open('textfiletitle.txt', 'r' , encoding = 'utf8')
+text = file.read()
+file.close()
+
+text_normalized = text.lower().split(' ')
+
+#Adjust range as desired
+keyword_range = 4
+word_count = 0
+
+for interval in range(len(text_normalized)):
+    if 'blind' in text_normalized[interval]:
+        word_count += 1
+        start = max(0, interval - keyword_range)
+        end = min(len(text_normalized), interval + keyword_range + 1)
+        kwic = text_normalized[start:end]
+        print(kwic)
+
+print('Total word frequency:' , word_count)
