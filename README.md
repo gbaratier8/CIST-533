@@ -17,7 +17,8 @@ Activity 6: Data cleaning and normalization of a CSV (.csv)
 
 Activity 7: Extracting information from a ZIP file (.zip), basic NLP techniques on a corpus of text files, BM25 calculation
 
-Sources:
+Sources Used: 
+
 Activity 1 - 
 Turkel, W.J. & Crymble, A. (2012). "Working with Text Files in Python," Programming Historian 1, https://doi.org/10.46430/phen0020. 
 
